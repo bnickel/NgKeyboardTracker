@@ -9,12 +9,14 @@
 #ifndef NgKeyboardTracker_NgPseudoInputAccessoryViewCoordinatorPrivates_h
 #define NgKeyboardTracker_NgPseudoInputAccessoryViewCoordinatorPrivates_h
 
+@class NgInputViewTracker;
+
 @protocol NgPseudoInputAccessoryViewCoordinatorDelegate
 @optional
 - (void)pseudoInputAccessoryViewCoordinator:(NgPseudoInputAccessoryViewCoordinator *)coordinator
                                didSetHeight:(CGFloat)height;
-- (void)pseudoInputAccessoryViewCoordinator:(NgPseudoInputAccessoryViewCoordinator *)coordinator
-                     keyboardFrameDidChange:(CGRect)frame;
+- (NgInputViewTracker *)pseudoInputAccessoryViewCoordinatorRequestedInputViewTracker:(NgPseudoInputAccessoryViewCoordinator *)coordinator;
+
 @end
 
 @interface NgPseudoInputAccessoryViewCoordinator (Privates)

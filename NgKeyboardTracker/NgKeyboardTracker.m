@@ -8,6 +8,7 @@
 
 #import "NgKeyboardTracker.h"
 #import "NgPseudoInputAccessoryViewCoordinatorPrivates.h"
+#import "NgInputViewTrackerPrivates.h"
 
 static inline UIViewAnimationOptions NgAnimationOptionsWithCurve(UIViewAnimationCurve curve)
 {
@@ -98,7 +99,7 @@ NSString * NgAppearanceStateAsString(NgKeyboardTrackerKeyboardAppearanceState st
 @end
 
 #pragma mark -
-@interface NgKeyboardTracker () <NgPseudoInputAccessoryViewCoordinatorDelegate> {
+@interface NgKeyboardTracker () <NgPseudoInputAccessoryViewCoordinatorDelegate, NgInputViewTrackerDelegate> {
   
   BOOL _tracking;
   NSMutableArray * _delegates;
@@ -239,6 +240,11 @@ NSString * NgAppearanceStateAsString(NgKeyboardTrackerKeyboardAppearanceState st
   return coordinator;
 }
 
+- (NgInputViewTracker *)createInputViewTracker
+{
+    return [[NgInputViewTracker alloc] initWithDelegate:self];
+}
+
 #pragma mark Internal
 - (void)updateAppearanceState:(NgKeyboardTrackerKeyboardAppearanceState)newState {
   _appearanceState = newState;
@@ -334,14 +340,21 @@ NSString * NgAppearanceStateAsString(NgKeyboardTrackerKeyboardAppearanceState st
 
 #pragma mark NgPseudoInputAccessoryViewCoordinatorDelegate
 - (void)pseudoInputAccessoryViewCoordinator:(NgPseudoInputAccessoryViewCoordinator *)coordinator
-                     keyboardFrameDidChange:(CGRect)frame {
-  
-  _currentFrame = frame;
-  _animationDuration = 0;
-  [self notifyAllDelegates];
-}
-- (void)pseudoInputAccessoryViewCoordinator:(NgPseudoInputAccessoryViewCoordinator *)coordinator
                                didSetHeight:(CGFloat)height {
   _inputAccessoryViewHeight = height;
 }
+
+- (NgInputViewTracker *)pseudoInputAccessoryViewCoordinatorRequestedInputViewTracker:(NgPseudoInputAccessoryViewCoordinator *)coordinator {
+    return [self createInputViewTracker];
+}
+
+#pragma mark NgInputViewTrackerDelegate
+
+- (void)inputViewTracker:(NgInputViewTracker *)inputViewTracker
+  keyboardFrameDidChange:(CGRect)frame {
+    _currentFrame = frame;
+    _animationDuration = 0;
+    [self notifyAllDelegates];
+}
+
 @end

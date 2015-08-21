@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "NgPseudoInputAccessoryViewCoordinator.h"
+#import "NgInputViewTracker.h"
 
 typedef NS_ENUM(int32_t, NgKeyboardTrackerKeyboardAppearanceState) {
   NgKeyboardTrackerKeyboardAppearanceStateUndefined,
@@ -85,6 +86,13 @@ NSString * NgAppearanceStateAsString(NgKeyboardTrackerKeyboardAppearanceState st
  *   whenever layout changes occurred.
  */
 - (NgPseudoInputAccessoryViewCoordinator *)createPseudoInputAccessoryViewCoordinator;
+
+/**
+ * Create instance of input view tracker to be used with inputAccessoryViews.
+ * Instances create by this tracker will update the tracker
+ *   whenever layout changes occurred.
+ */
+- (NgInputViewTracker *)createInputViewTracker;
 
 #pragma mark Convenience Methods
 /**
